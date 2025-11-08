@@ -1,0 +1,14 @@
+# Staging overrides
+images:
+  api:
+    tag: staging
+  frontend:
+    tag: staging
+ingress:
+  enabled: true
+  hosts:
+    - host: staging.retail.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend

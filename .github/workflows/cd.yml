@@ -1,0 +1,58 @@
+name: CD - helm deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment (dev|staging|prod)
+        required: true
+        default: dev
+      image_tag:
+        description: Image tag to deploy (defaults to commit SHA)
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      ENV_NAME: ${{ inputs.environment || 'dev' }}
+      IMAGE_TAG: ${{ inputs.image_tag || github.sha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Write kubeconfig
+        shell: bash
+        env:
+          KUBE_CONFIG_DEV: ${{ secrets.KUBE_CONFIG_DEV }}
+          KUBE_CONFIG_STAGING: ${{ secrets.KUBE_CONFIG_STAGING }}
+          KUBE_CONFIG_PROD: ${{ secrets.KUBE_CONFIG_PROD }}
+        run: |
+          set -e
+          mkdir -p $HOME/.kube
+          if [ "$ENV_NAME" = "dev" ]; then CFG="$KUBE_CONFIG_DEV"; fi
+          if [ "$ENV_NAME" = "staging" ]; then CFG="$KUBE_CONFIG_STAGING"; fi
+          if [ "$ENV_NAME" = "prod" ]; then CFG="$KUBE_CONFIG_PROD"; fi
+          if [ -z "$CFG" ]; then echo "Missing kubeconfig secret for $ENV_NAME"; exit 1; fi
+          echo "$CFG" > $HOME/.kube/config
+
+      - name: Helm upgrade/install
+        shell: bash
+        run: |
+          set -e
+          REGISTRY="ghcr.io/${{ github.repository_owner }}"
+          helm upgrade --install retail infra/helm/retail \
+            -n retail-ai --create-namespace \
+            -f infra/helm/retail/values.yaml \
+            -f infra/helm/retail/values-$ENV_NAME.yaml \
+            --set global.imageRegistry=$REGISTRY \
+            --set images.api.tag=$IMAGE_TAG \
+            --set images.frontend.tag=$IMAGE_TAG

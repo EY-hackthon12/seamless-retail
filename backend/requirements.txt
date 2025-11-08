@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+pydantic>=2.7
+pydantic-settings>=2.4
+pandas
+numpy
+SQLAlchemy>=2.0
+asyncpg
+psycopg2-binary
+python-dotenv
+langchain>=0.2
+langchain-openai>=0.2
+langgraph>=0.2
+chromadb>=0.5
+httpx
+requests

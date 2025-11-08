@@ -1,0 +1,6 @@
+# Default env values for dev
+images:
+  api:
+    tag: dev
+  frontend:
+    tag: dev

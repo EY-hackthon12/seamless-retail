@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chroma
+  labels:
+    app: chroma
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chroma
+  template:
+    metadata:
+      labels:
+        app: chroma
+    spec:
+      containers:
+        - name: chroma
+          image: {{ .Values.images.chroma.repository }}:{{ .Values.images.chroma.tag }}
+          imagePullPolicy: {{ .Values.images.chroma.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.chroma.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chroma
+spec:
+  selector:
+    app: chroma
+  ports:
+    - port: {{ .Values.service.chroma.port }}
+      targetPort: {{ .Values.service.chroma.port }}

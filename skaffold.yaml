@@ -1,0 +1,29 @@
+version: "3.9"
+
+# Local Kubernetes dev with kubectl context
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: seamless-retail
+build:
+  artifacts:
+    - image: ghcr.io/OWNER/seamless-retail-api
+      docker:
+        dockerfile: infra/docker/Dockerfile.backend
+    - image: ghcr.io/OWNER/seamless-retail-frontend
+      docker:
+        dockerfile: infra/docker/Dockerfile.frontend
+manifests:
+  helm:
+    releases:
+      - name: retail
+        chartPath: infra/helm/retail
+        namespace: retail-ai
+        createNamespace: true
+        setValues:
+          global.imageRegistry: ghcr.io/OWNER
+        valuesFiles:
+          - infra/helm/retail/values.yaml
+          - infra/helm/retail/values-dev.yaml
+deploy:
+  helm: {}

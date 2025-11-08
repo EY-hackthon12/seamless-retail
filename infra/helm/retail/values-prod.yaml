@@ -1,0 +1,14 @@
+# Production overrides
+images:
+  api:
+    tag: latest
+  frontend:
+    tag: latest
+ingress:
+  enabled: true
+  hosts:
+    - host: retail.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend

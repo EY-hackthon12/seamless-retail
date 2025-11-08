@@ -1,0 +1,6 @@
+apiVersion: v2
+name: retail
+description: Helm chart for Agentic AI for Seamless Retail
+version: 0.1.0
+appVersion: "0.1.0"
+type: application

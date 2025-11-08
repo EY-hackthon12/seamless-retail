@@ -1,0 +1,16 @@
+# syntax=docker/dockerfile:1
+
+# build stage
+FROM node:20-alpine AS build
+WORKDIR /frontend
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm ci || npm install
+COPY frontend .
+RUN npm run build
+
+# serve stage
+FROM nginx:alpine
+COPY --from=build /frontend/dist /usr/share/nginx/html
+COPY infra/docker/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 5173
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,58 @@
+global:
+  imageRegistry: ghcr.io/OWNER
+  namespace: retail-ai
+
+images:
+  api:
+    repository: seamless-retail-api
+    tag: latest
+    pullPolicy: IfNotPresent
+  frontend:
+    repository: seamless-retail-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  chroma:
+    repository: ghcr.io/chroma-core/chroma
+    tag: latest
+    pullPolicy: IfNotPresent
+  postgres:
+    repository: postgres
+    tag: "16"
+    pullPolicy: IfNotPresent
+
+service:
+  api:
+    port: 8000
+  frontend:
+    type: LoadBalancer
+    port: 5173
+  chroma:
+    port: 8001
+  postgres:
+    port: 5432
+
+apiEnv:
+  POSTGRES_HOST: postgres
+  CHROMA_HOST: chroma
+  CORS_ORIGINS: http://localhost:5173
+  PROJECT_NAME: seamless-retail
+  API_V1_STR: /api/v1
+
+secrets:
+  POSTGRES_PASSWORD: retail
+  OPENAI_API_KEY: ""
+  HUGGINGFACE_API_KEY: ""
+
+postgres:
+  storage: 10Gi
+
+ingress:
+  enabled: false
+  className: nginx
+  hosts:
+    - host: retail.local
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend
+  tls: []
