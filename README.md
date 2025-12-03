@@ -79,6 +79,3 @@ Detailed documentation is available in the `docs/` directory:
 
 ## 🤝 Contributing
 Contributions are welcome! Please read the documentation and follow the code style.
-
-## 📄 License
-MIT License.
