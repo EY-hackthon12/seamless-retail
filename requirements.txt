@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+langgraph
+langchain
+langchain_openai
+asyncpg
+pydantic
+python-dotenv
+sqlalchemy
+python-multipart
+httpx

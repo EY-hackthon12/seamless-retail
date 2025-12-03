@@ -1,32 +1,51 @@
-import { useState } from 'react'
-import axios from 'axios'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import MobileChat from './components/MobileChat';
+import KioskDashboard from './components/KioskDashboard';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
-
-export default function App() {
-  const [message, setMessage] = useState('Hi, I am looking for shoes for a wedding.')
-  const [trace, setTrace] = useState<string[]>([])
-  const [route, setRoute] = useState('')
-
-  const send = async () => {
-    const res = await axios.post(`${API_BASE}/api/v1/chat`, { message })
-    setTrace(res.data.trace)
-    setRoute(res.data.route)
-  }
-
+function App() {
   return (
-    <div className="max-w-2xl mx-auto p-8 space-y-4">
-      <h1 className="text-2xl font-bold">Seamless Retail Demo</h1>
-      <div className="flex gap-2">
-        <input className="flex-1 border rounded p-2" value={message} onChange={e=>setMessage(e.target.value)} />
-        <button className="bg-black text-white px-4 py-2 rounded" onClick={send}>Send</button>
+    <Router>
+      <div className="min-h-screen">
+        <nav className="bg-primary text-white p-4 shadow-md">
+          <div className="container mx-auto flex justify-between items-center">
+            <h1 className="text-xl font-bold tracking-tight">UrbanVogue AI</h1>
+            <div className="space-x-4">
+              <Link to="/mobile" className="hover:text-accent transition-colors">Mobile App</Link>
+              <Link to="/kiosk" className="hover:text-accent transition-colors">In-Store Kiosk</Link>
+            </div>
+          </div>
+        </nav>
+
+        <main className="container mx-auto p-4">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/mobile" element={<MobileChat />} />
+            <Route path="/kiosk" element={<KioskDashboard />} />
+          </Routes>
+        </main>
       </div>
-      <div className="border rounded p-4 bg-white">
-        <div className="text-sm text-gray-500">Route: {route}</div>
-        <ul className="list-disc pl-6">
-          {trace.map((t, i) => <li key={i}>{t}</li>)}
-        </ul>
+    </Router>
+  );
+}
+
+function Home() {
+  return (
+    <div className="flex flex-col items-center justify-center h-[80vh] space-y-8">
+      <h2 className="text-4xl font-bold text-center">Experience Seamless Retail</h2>
+      <p className="text-xl text-gray-600 max-w-2xl text-center">
+        Start your journey on the mobile app, and continue seamlessly at our in-store kiosk.
+        Our Cognitive Retail Brain remembers your context.
+      </p>
+      <div className="flex space-x-6">
+        <Link to="/mobile" className="px-8 py-4 bg-primary text-white rounded-lg shadow-lg hover:bg-secondary transition-all transform hover:scale-105">
+          Launch Mobile App
+        </Link>
+        <Link to="/kiosk" className="px-8 py-4 bg-white text-primary border-2 border-primary rounded-lg shadow-lg hover:bg-gray-50 transition-all transform hover:scale-105">
+          Launch Kiosk
+        </Link>
       </div>
     </div>
-  )
+  );
 }
+
+export default App;

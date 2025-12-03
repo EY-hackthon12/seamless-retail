@@ -2,4 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light dark; }
+body {
+  @apply bg-background text-primary font-sans;
+}
