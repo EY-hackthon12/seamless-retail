@@ -31,7 +31,7 @@ app.include_router(mobile.router, prefix="/api/mobile", tags=["Mobile"])
 app.include_router(kiosk.router, prefix="/api/kiosk", tags=["Kiosk"])
 app.include_router(models.router, prefix="/api/models", tags=["Model Hosting"])
 
-app.include_router(models.router, prefix="/api/models", tags=["Model Hosting"])
+
 
 # Serve Frontend in Docker (Production)
 import os

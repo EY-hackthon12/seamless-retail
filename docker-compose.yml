@@ -38,6 +38,28 @@ services:
       db:
         condition: service_healthy
 
+  llm-host:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.gpu
+    command: python scripts/hosting/serve_optimized.py --port 8000
+    volumes:
+      - .:/app
+      - ./models:/app/models
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    environment:
+      - BASE_MODEL=bigcode/starcoder2-3b
+      - QUANTIZATION=4bit
+      - ENABLE_COMPILE=0 # Often safer to disable on Docker+Consumer
+
   frontend:
     image: node:18-alpine
     working_dir: /app

@@ -39,7 +39,7 @@ async def load_model(request: LoadModelRequest):
 async def predict(request: PredictRequest):
     """Run inference on a specific local model."""
     try:
-        response = model_manager.predict(request.model_name, request.prompt, **request.parameters)
+        response = await model_manager.predict(request.model_name, request.prompt, **request.parameters)
         return {"response": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -8,13 +8,13 @@ class RecommendationInput(BaseModel):
     use_local_model: bool = Field(default=False, description="Whether to use the local fine-tuned model")
 
 @tool("get_recommendations", args_schema=RecommendationInput)
-def get_recommendations(context: str, use_local_model: bool = False) -> str:
+async def get_recommendations(context: str, use_local_model: bool = False) -> str:
     """Provides product recommendations based on the current context."""
     
     if use_local_model:
         # Example of using the local model manager
         # In a real scenario, we would pass a specific model name like "fashion-mistral-7b"
-        return model_manager.predict("fashion-finetune-v1", context)
+        return await model_manager.predict("optimized-code-agent", context)
 
     if "blue suit" in context.lower():
         return "Recommended: Brown Leather Oxfords. They pair perfectly with the Blue Suit."

@@ -9,3 +9,18 @@ python-dotenv
 sqlalchemy
 python-multipart
 httpx
+# --- Optimization Deps ---
+torch --index-url https://download.pytorch.org/whl/cu121
+accelerate
+bitsandbytes
+scipy
+transformers>=4.36.0
+optimum
+aiohttp
+numpy
+psutil
+peft
+sentence-transformers
+faiss-cpu
+pypdf
+tiktoken
