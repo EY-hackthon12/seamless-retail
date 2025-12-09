@@ -38,7 +38,7 @@ const items = [
 
 
 export default function Home() {
-  
+
   const handleAnimationComplete = () => {
     console.log('Animation completed!');
   };
@@ -67,7 +67,7 @@ export default function Home() {
           noise={0.08}
           transparent
         />
-        
+
       </div>
 
       <div className="relative p-3 flex flex-col items-center justify-center z-2">
@@ -81,8 +81,8 @@ export default function Home() {
           onAnimationComplete={handleAnimationComplete}
           className={`text-7xl md:text-8xl font-bold mb-8 text-white ${doto.className}`}
         />
-       <BlurText
-          text="Intelligent Loan Sales Assistant"
+        <BlurText
+          text="Agentic AI for Seamless Retail"
           delay={80}
           animateBy="letters"
           direction="top"
@@ -91,13 +91,35 @@ export default function Home() {
         />
 
         <div className="z-10 mt-8 w-[300px] rounded-3xl flex items-center justify-center p-4">
-         <BubbleMenu
-          items={items}
-          menuBg="#ffffff"
-          menuContentColor="#111111"
-          animationDuration={0.6}
-          staggerDelay={0.15}
-        />
+          <BubbleMenu
+            items={[
+              {
+                label: 'Open SR²',
+                href: '/la',
+                ariaLabel: 'Open Agent',
+                rotation: -8,
+                hoverStyles: { bgColor: '#3b82f6', textColor: '#ffffff' }
+              },
+              {
+                label: 'about',
+                href: '/about',
+                ariaLabel: 'About',
+                rotation: 8,
+                hoverStyles: { bgColor: '#8b5cf6', textColor: '#ffffff' }
+              },
+              {
+                label: 'contact',
+                href: '/contact',
+                ariaLabel: 'Contact',
+                rotation: 5,
+                hoverStyles: { bgColor: '#10b981', textColor: '#ffffff' }
+              }
+            ]}
+            menuBg="#ffffff"
+            menuContentColor="#111111"
+            animationDuration={0.6}
+            staggerDelay={0.15}
+          />
         </div>
       </div>
       {/* </ClickSpark> */}

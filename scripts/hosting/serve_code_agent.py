@@ -92,6 +92,11 @@ class InferenceEngine:
         
         streamer = TextIteratorStreamer(self.tokenizer, skip_prompt=True, decode_kwargs={"skip_special_tokens": True})
         
+        # Prepare terminators (EOS + ChatML End)
+        terminators = [self.tokenizer.eos_token_id]
+        if "<|im_end|>" in self.tokenizer.get_vocab():
+            terminators.append(self.tokenizer.convert_tokens_to_ids("<|im_end|>"))
+
         generation_kwargs = dict(
             **inputs,
             streamer=streamer,
@@ -99,6 +104,7 @@ class InferenceEngine:
             temperature=request.temperature,
             top_p=request.top_p,
             do_sample=True,
+            eos_token_id=terminators,
             pad_token_id=self.tokenizer.eos_token_id
         )
 
@@ -166,10 +172,20 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
             data = await websocket.receive_text()
             payload = json.loads(data)
             user_message = payload.get("message", "")
+            # Improved Prompting Strategy (ChatML format for Qwen/StarCoder)
+            SYSTEM_PROMPT = (
+                "You are an expert coding assistant named LA² (Loan Assistant AI). "
+                "You provide clear, correct, and efficient code solutions. "
+                "Always format code blocks with markdown. "
+                "Be concise and helpful."
+            )
             
-            # Construct a prompt for the code agent
-            # You might want to format this better with a system prompt if the model supports it
-            prompt_formatted = f"User: {user_message}\nAssistant:"
+            # Construct prompt with special tokens
+            prompt_formatted = (
+                f"<|im_start|>system\n{SYSTEM_PROMPT}<|im_end|>\n"
+                f"<|im_start|>user\n{user_message}<|im_end|>\n"
+                f"<|im_start|>assistant\n"
+            )
             
             req = GenerateRequest(prompt=prompt_formatted, stream=True, max_new_tokens=512)
             

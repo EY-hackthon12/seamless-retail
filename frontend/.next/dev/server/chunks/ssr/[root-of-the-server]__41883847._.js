@@ -822,7 +822,7 @@ function Home() {
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$BlurText$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                        text: "Intelligent Loan Sales Assistant",
+                        text: "Agentic AI for Seamless Retail",
                         delay: 80,
                         animateBy: "letters",
                         direction: "top",
@@ -831,12 +831,43 @@ function Home() {
                     }, void 0, false, {
                         fileName: "[project]/src/app/page.tsx",
                         lineNumber: 84,
-                        columnNumber: 8
+                        columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "z-10 mt-8 w-[300px] rounded-3xl flex items-center justify-center p-4",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$BubbleMenu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                            items: items,
+                            items: [
+                                {
+                                    label: 'Open SR²',
+                                    href: '/la',
+                                    ariaLabel: 'Open Agent',
+                                    rotation: -8,
+                                    hoverStyles: {
+                                        bgColor: '#3b82f6',
+                                        textColor: '#ffffff'
+                                    }
+                                },
+                                {
+                                    label: 'about',
+                                    href: '/about',
+                                    ariaLabel: 'About',
+                                    rotation: 8,
+                                    hoverStyles: {
+                                        bgColor: '#8b5cf6',
+                                        textColor: '#ffffff'
+                                    }
+                                },
+                                {
+                                    label: 'contact',
+                                    href: '/contact',
+                                    ariaLabel: 'Contact',
+                                    rotation: 5,
+                                    hoverStyles: {
+                                        bgColor: '#10b981',
+                                        textColor: '#ffffff'
+                                    }
+                                }
+                            ],
                             menuBg: "#ffffff",
                             menuContentColor: "#111111",
                             animationDuration: 0.6,
@@ -844,7 +875,7 @@ function Home() {
                         }, void 0, false, {
                             fileName: "[project]/src/app/page.tsx",
                             lineNumber: 94,
-                            columnNumber: 10
+                            columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/page.tsx",

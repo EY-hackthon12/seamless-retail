@@ -1136,12 +1136,12 @@ const items = [
     }
 ];
 function Home() {
-    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(7);
-    if ($[0] !== "5040d81517d769a5a4ab2714efba1d28e11c7dec0a8508be89d6d65377d3c75c") {
-        for(let $i = 0; $i < 7; $i += 1){
+    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(9);
+    if ($[0] !== "0bbfe4659090907866fd999363fc200475785e06e495e8965dec35e3471a74d5") {
+        for(let $i = 0; $i < 9; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "5040d81517d769a5a4ab2714efba1d28e11c7dec0a8508be89d6d65377d3c75c";
+        $[0] = "0bbfe4659090907866fd999363fc200475785e06e495e8965dec35e3471a74d5";
     }
     const handleAnimationComplete = _HomeHandleAnimationComplete;
     let t0;
@@ -1218,7 +1218,7 @@ function Home() {
             columnNumber: 10
         }, this);
         t4 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$BlurText$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-            text: "Intelligent Loan Sales Assistant",
+            text: "Agentic AI for Seamless Retail",
             delay: 80,
             animateBy: "letters",
             direction: "top",
@@ -1239,7 +1239,39 @@ function Home() {
     }
     let t5;
     if ($[6] === Symbol.for("react.memo_cache_sentinel")) {
-        t5 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
+        t5 = {
+            label: "Open SR\xB2",
+            href: "/la",
+            ariaLabel: "Open Agent",
+            rotation: -8,
+            hoverStyles: {
+                bgColor: "#3b82f6",
+                textColor: "#ffffff"
+            }
+        };
+        $[6] = t5;
+    } else {
+        t5 = $[6];
+    }
+    let t6;
+    if ($[7] === Symbol.for("react.memo_cache_sentinel")) {
+        t6 = {
+            label: "about",
+            href: "/about",
+            ariaLabel: "About",
+            rotation: 8,
+            hoverStyles: {
+                bgColor: "#8b5cf6",
+                textColor: "#ffffff"
+            }
+        };
+        $[7] = t6;
+    } else {
+        t6 = $[7];
+    }
+    let t7;
+    if ($[8] === Symbol.for("react.memo_cache_sentinel")) {
+        t7 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
             className: "relative flex items-center justify-center h-screen w-full overflow-hidden",
             children: [
                 t0,
@@ -1253,38 +1285,51 @@ function Home() {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "z-10 mt-8 w-[300px] rounded-3xl flex items-center justify-center p-4",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$BubbleMenu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                items: items,
+                                items: [
+                                    t5,
+                                    t6,
+                                    {
+                                        label: "contact",
+                                        href: "/contact",
+                                        ariaLabel: "Contact",
+                                        rotation: 5,
+                                        hoverStyles: {
+                                            bgColor: "#10b981",
+                                            textColor: "#ffffff"
+                                        }
+                                    }
+                                ],
                                 menuBg: "#ffffff",
                                 menuContentColor: "#111111",
                                 animationDuration: 0.6,
                                 staggerDelay: 0.15
                             }, void 0, false, {
                                 fileName: "[project]/src/app/page.tsx",
-                                lineNumber: 84,
+                                lineNumber: 116,
                                 columnNumber: 284
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 84,
+                            lineNumber: 116,
                             columnNumber: 198
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/page.tsx",
-                    lineNumber: 84,
+                    lineNumber: 116,
                     columnNumber: 110
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/page.tsx",
-            lineNumber: 84,
+            lineNumber: 116,
             columnNumber: 10
         }, this);
-        $[6] = t5;
+        $[8] = t7;
     } else {
-        t5 = $[6];
+        t7 = $[8];
     }
-    return t5;
+    return t7;
 }
 _c = Home;
 function _HomeHandleAnimationComplete() {
