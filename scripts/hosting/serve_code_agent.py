@@ -42,7 +42,7 @@ class InferenceEngine:
     def load_model(self):
         print("--> [Engine] Initializing Ultra-Fast Stack...")
         
-        base_model_id = os.getenv("BASE_MODEL", "bigcode/starcoder2-3b")
+        base_model_id = os.getenv("BASE_MODEL", "Qwen/Qwen2.5-Coder-0.5B")
         adapter_path = os.getenv("ADAPTER_PATH", "trained_models/code_agent_proto/final_adapter")
         
         # 1. Quantization (4-bit NF4) - Memory optimization
@@ -60,22 +60,23 @@ class InferenceEngine:
         if torch.cuda.is_available():
             major, _ = torch.cuda.get_device_capability()
             if major >= 8:
-                use_flash = True
-                print("--> [Engine] Flash Attention 2 Enabled (Ampere+ detected)")
+                # use_flash = True
+                print("--> [Engine] Flash Attention 2 disabled (package missing)")
 
         self.model = AutoModelForCausalLM.from_pretrained(
             base_model_id,
             quantization_config=bnb_config,
             device_map="auto",
             trust_remote_code=True,
-            attn_implementation="flash_attention_2" if use_flash else "eager"
+            attn_implementation="eager"
         )
 
-        if os.path.exists(adapter_path):
-            print(f"--> [Engine] Injecting LoRA Adapter: {adapter_path}")
-            self.model = PeftModel.from_pretrained(self.model, adapter_path)
-        else:
-            print(f"!! [Engine] Adapter missing at {adapter_path}. Running Base Model.")
+        # DEBUG MODE: Adapter disabled because we switched base models
+        # if os.path.exists(adapter_path):
+        #     print(f"--> [Engine] Injecting LoRA Adapter: {adapter_path}")
+        #     self.model = PeftModel.from_pretrained(self.model, adapter_path)
+        # else:
+        print(f"!! [Engine] Running in DEBUG MODE (No Adapter).")
 
         self.tokenizer = AutoTokenizer.from_pretrained(base_model_id, trust_remote_code=True)
         self.tokenizer.pad_token = self.tokenizer.eos_token
