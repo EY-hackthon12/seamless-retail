@@ -96,7 +96,7 @@ def train():
         push_to_hub=False,
         report_to="none",
         # SFT specific args
-        max_seq_length=args.max_seq_length,
+        max_length=args.max_seq_length,
         dataset_text_field="text",
     )
 
@@ -105,7 +105,7 @@ def train():
         model=model,
         train_dataset=data,
         peft_config=peft_config,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         args=training_args,
     )
 

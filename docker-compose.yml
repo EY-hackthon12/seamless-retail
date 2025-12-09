@@ -18,34 +18,36 @@ services:
       timeout: 5s
       retries: 5
 
-  backend:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-    volumes:
-      - .:/app
-      - ./models:/app/models
-    ports:
-      - "8000:8000"
-    environment:
-      - POSTGRES_SERVER=db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=retail_brain
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-    depends_on:
-      db:
-        condition: service_healthy
+  # backend:
+  #   build:
+  #     context: .
+  #     dockerfile: docker/Dockerfile
+  #   command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+  #   volumes:
+  #     - .:/app
+  #     - ./models:/app/models
+  #   ports:
+  #     - "8001:8000"
+  #   environment:
+  #     - POSTGRES_SERVER=db
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_DB=retail_brain
+  #     - OPENAI_API_KEY=${OPENAI_API_KEY}
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
 
   llm-host:
     build:
       context: .
       dockerfile: docker/Dockerfile.gpu
-    command: python scripts/hosting/serve_optimized.py --port 8000
+    command: python scripts/hosting/serve_code_agent.py
     volumes:
       - .:/app
       - ./models:/app/models
+      # Mount huggingface cache to avoid redownloading models
+      - ~/.cache/huggingface:/root/.cache/huggingface
     ports:
       - "8000:8000"
     deploy:
@@ -57,21 +59,23 @@ services:
               capabilities: [ gpu ]
     environment:
       - BASE_MODEL=bigcode/starcoder2-3b
-      - QUANTIZATION=4bit
-      - ENABLE_COMPILE=0 # Often safer to disable on Docker+Consumer
+      - ADAPTER_PATH=trained_models/code_agent_proto/final_adapter
+      - MAX_BATCH_SIZE=4
+      - BATCH_TIMEOUT=0.01
 
   frontend:
-    image: node:18-alpine
+    image: node:20-alpine
     working_dir: /app
     volumes:
       - ./frontend:/app
-    command: sh -c "npm install && npm run dev -- --host"
+      - /app/node_modules # Anonymous volume for node_modules
+    command: sh -c "npm install && npm run dev -- -H 0.0.0.0"
     ports:
-      - "5173:5173"
+      - "3000:3000"
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
     depends_on:
-      - backend
+      - llm-host
 
 volumes:
   postgres_data:
