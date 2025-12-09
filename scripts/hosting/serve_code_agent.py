@@ -4,8 +4,10 @@ import torch
 import asyncio
 import uuid
 import time
+import json
 from typing import Optional, List
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from contextlib import asynccontextmanager
@@ -121,6 +123,15 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Research-Grade Code Agent", lifespan=lifespan)
 
+# --- CORS Middleware ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # For dev/hackathon, allow all. In prod, lock this down.
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.post("/v1/completions")
 async def generate(request: GenerateRequest):
     """
@@ -138,6 +149,47 @@ async def generate(request: GenerateRequest):
         for chunk in engine.generate_stream(request):
             full_text += chunk
         return {"id": str(uuid.uuid4()), "choices": [{"text": full_text}]}
+
+# --- New Frontend API Support ---
+
+@app.post("/api/v1/sessions")
+async def create_session():
+    """Creates a new session ID for the chat frontend."""
+    return {"session_id": str(uuid.uuid4())}
+
+@app.websocket("/api/v1/ws/{session_id}")
+async def websocket_endpoint(websocket: WebSocket, session_id: str):
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_text()
+            payload = json.loads(data)
+            user_message = payload.get("message", "")
+            
+            # Construct a prompt for the code agent
+            # You might want to format this better with a system prompt if the model supports it
+            prompt_formatted = f"User: {user_message}\nAssistant:"
+            
+            req = GenerateRequest(prompt=prompt_formatted, stream=True, max_new_tokens=512)
+            
+            # Stream response back to WebSocket
+            for chunk in engine.generate_stream(req):
+                await websocket.send_json({
+                    "type": "message",
+                    "content": chunk
+                })
+            
+            # Signal end of turn
+            await websocket.send_json({"type": "end"})
+            
+    except WebSocketDisconnect:
+        print(f"Session {session_id} disconnected")
+    except Exception as e:
+        print(f"Error in websocket: {e}")
+        try:
+            await websocket.close()
+        except:
+            pass
 
 @app.get("/health")
 def health():

@@ -20,6 +20,13 @@ python scripts/training/train_code_agent.py ^
     --grad_accum 4 ^
     --output_dir "trained_models/code_agent_proto"
 
+if %errorlevel% neq 0 (
+    echo.
+    echo Training FAILED! See error above.
+    pause
+    exit /b %errorlevel%
+)
+
 echo.
 echo Training complete!
 pause

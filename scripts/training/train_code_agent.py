@@ -11,7 +11,7 @@ from transformers import (
     BitsAndBytesConfig,
     TrainingArguments,
 )
-from trl import SFTTrainer
+from trl import SFTTrainer, SFTConfig
 import argparse
 
 def train():
@@ -80,7 +80,8 @@ def train():
         data = Dataset.from_list(dummy_data)
 
     # 5. Training Arguments
-    training_args = TrainingArguments(
+    # 5. Training Arguments (SFTConfig for newer trl)
+    training_args = SFTConfig(
         output_dir=args.output_dir,
         per_device_train_batch_size=args.batch_size,
         gradient_accumulation_steps=args.grad_accum,
@@ -93,7 +94,10 @@ def train():
         fp16=True,
         optim="paged_adamw_8bit",
         push_to_hub=False,
-        report_to="none"
+        report_to="none",
+        # SFT specific args
+        max_seq_length=args.max_seq_length,
+        dataset_text_field="text",
     )
 
     # 6. Trainer
@@ -101,8 +105,6 @@ def train():
         model=model,
         train_dataset=data,
         peft_config=peft_config,
-        dataset_text_field="text",
-        max_seq_length=args.max_seq_length,
         tokenizer=tokenizer,
         args=training_args,
     )
