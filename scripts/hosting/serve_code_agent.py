@@ -1,88 +1,155 @@
 
 import os
 import torch
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+import asyncio
+import uuid
+import time
+from typing import Optional, List
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel, Field
+from contextlib import asynccontextmanager
 from peft import PeftModel
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
-import uvicorn
-import argparse
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    BitsAndBytesConfig,
+    TextIteratorStreamer
+)
+from threading import Thread
 
-app = FastAPI(title="Code Agent Host", description="API to serve trained code agent models")
+# --- Configuration & optimization vars ---
+MAX_BATCH_SIZE = int(os.getenv("MAX_BATCH_SIZE", "4"))
+BATCH_TIMEOUT = float(os.getenv("BATCH_TIMEOUT", "0.01")) # 10ms dynamic batch window
 
-# Global model and tokenizer
-model = None
-tokenizer = None
-
+# --- Data Models ---
 class GenerateRequest(BaseModel):
     prompt: str
-    max_new_tokens: int = 256
-    temperature: float = 0.2
-    do_sample: bool = True
+    max_new_tokens: int = Field(default=512, ge=1, le=4096)
+    temperature: float = Field(default=0.2, ge=0.0, le=2.0)
+    top_p: float = Field(default=0.95, ge=0.0, le=1.0)
+    stream: bool = False
 
-@app.on_event("startup")
-async def startup_event():
-    global model, tokenizer
-    
-    # Defaults - can be overridden by env vars or similar if needed for advanced usage
-    # For now, hardcoding based on expected usage or passing args if we were running as script
-    # But since uvicorn runs this, we'll check ENV vars or default to prototype
-    
-    base_model_id = os.getenv("BASE_MODEL", "bigcode/starcoder2-3b")
-    adapter_path = os.getenv("ADAPTER_PATH", "trained_models/code_agent_proto/final_adapter")
-    
-    print(f"--> Loading Service...")
-    print(f"--> Base Model: {base_model_id}")
-    print(f"--> Adapter: {adapter_path}")
-    
-    bnb_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.float16,
-    )
-    
-    print("--> Loading Base Model (4-bit)...")
-    base_model = AutoModelForCausalLM.from_pretrained(
-        base_model_id,
-        quantization_config=bnb_config,
-        device_map="auto",
-        trust_remote_code=True
-    )
-    
-    if os.path.exists(adapter_path):
-        print(f"--> Loading Adapter from {adapter_path}...")
-        model = PeftModel.from_pretrained(base_model, adapter_path)
-    else:
-        print(f"!! Adapter not found at {adapter_path}. Using base model.")
-        model = base_model
+# --- Global Components ---
+class InferenceEngine:
+    def __init__(self):
+        self.model = None
+        self.tokenizer = None
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    def load_model(self):
+        print("--> [Engine] Initializing Ultra-Fast Stack...")
         
-    tokenizer = AutoTokenizer.from_pretrained(base_model_id, trust_remote_code=True)
-    print("--> Service Ready!")
+        base_model_id = os.getenv("BASE_MODEL", "bigcode/starcoder2-3b")
+        adapter_path = os.getenv("ADAPTER_PATH", "trained_models/code_agent_proto/final_adapter")
+        
+        # 1. Quantization (4-bit NF4) - Memory optimization
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_use_double_quant=True,
+        )
 
-@app.post("/generate")
-async def generate_code(request: GenerateRequest):
-    global model, tokenizer
-    if not model or not tokenizer:
-        raise HTTPException(status_code=503, detail="Model not loaded")
-    
-    inputs = tokenizer(request.prompt, return_tensors="pt").to("cuda")
-    
-    with torch.no_grad():
-        outputs = model.generate(
+        print(f"--> [Engine] Loading Base: {base_model_id}")
+        # 2. Low_cpu_mem_usage=True is default for accelerate, but good to be explicit
+        # 3. attn_implementation="flash_attention_2" if hardware supports it (Ampere+)
+        use_flash = False 
+        if torch.cuda.is_available():
+            major, _ = torch.cuda.get_device_capability()
+            if major >= 8:
+                use_flash = True
+                print("--> [Engine] Flash Attention 2 Enabled (Ampere+ detected)")
+
+        self.model = AutoModelForCausalLM.from_pretrained(
+            base_model_id,
+            quantization_config=bnb_config,
+            device_map="auto",
+            trust_remote_code=True,
+            attn_implementation="flash_attention_2" if use_flash else "eager"
+        )
+
+        if os.path.exists(adapter_path):
+            print(f"--> [Engine] Injecting LoRA Adapter: {adapter_path}")
+            self.model = PeftModel.from_pretrained(self.model, adapter_path)
+        else:
+            print(f"!! [Engine] Adapter missing at {adapter_path}. Running Base Model.")
+
+        self.tokenizer = AutoTokenizer.from_pretrained(base_model_id, trust_remote_code=True)
+        self.tokenizer.pad_token = self.tokenizer.eos_token
+        
+        # Warmup
+        print("--> [Engine] Warmup pass...")
+        with torch.no_grad():
+            _ = self.model.generate(**self.tokenizer("def test():", return_tensors="pt").to(self.device), max_new_tokens=10)
+        print("--> [Engine] Ready.")
+
+    def generate_stream(self, request: GenerateRequest):
+        inputs = self.tokenizer(request.prompt, return_tensors="pt").to(self.device)
+        
+        streamer = TextIteratorStreamer(self.tokenizer, skip_prompt=True, decode_kwargs={"skip_special_tokens": True})
+        
+        generation_kwargs = dict(
             **inputs,
+            streamer=streamer,
             max_new_tokens=request.max_new_tokens,
             temperature=request.temperature,
-            do_sample=request.do_sample,
-            pad_token_id=tokenizer.eos_token_id
+            top_p=request.top_p,
+            do_sample=True,
+            pad_token_id=self.tokenizer.eos_token_id
         )
-    
-    generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    # Optional: strip prompt if desired, but user often wants continuation
-    return {"generated_text": generated_text}
+
+        # Threaded generation to allow non-blocking streaming
+        thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
+        thread.start()
+
+        for new_text in streamer:
+            yield new_text
+        
+        thread.join()
+
+engine = InferenceEngine()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    engine.load_model()
+    yield
+    # Shutdown (cleanup if needed)
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+app = FastAPI(title="Research-Grade Code Agent", lifespan=lifespan)
+
+@app.post("/v1/completions")
+async def generate(request: GenerateRequest):
+    """
+    OpenAI-compatible-ish completion endpoint.
+    Supports high-performance streaming.
+    """
+    if request.stream:
+        return StreamingResponse(
+            engine.generate_stream(request), 
+            media_type="text/event-stream"
+        )
+    else:
+        # Non-streaming fallback
+        full_text = ""
+        for chunk in engine.generate_stream(request):
+            full_text += chunk
+        return {"id": str(uuid.uuid4()), "choices": [{"text": full_text}]}
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "device": engine.device}
 
 if __name__ == "__main__":
-    # If run directly
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--port", type=int, default=8000)
-    args = parser.parse_args()
-    uvicorn.run(app, host="0.0.0.0", port=args.port)
+    import uvicorn
+    # 4. Loop setup for performance
+    uvicorn.run(
+        "scripts.hosting.serve_code_agent:app", 
+        host="0.0.0.0", 
+        port=8000, 
+        reload=False,
+        workers=1 # One worker per GPU usually
+    )
