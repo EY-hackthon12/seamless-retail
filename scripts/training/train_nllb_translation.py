@@ -11,6 +11,12 @@ Key Fixes Applied:
 5. Proper configuration for gradient checkpointing compatibility
 6. Defensive model wrapper introspection to catch hidden embeddings
 
+CLaRA-Inspired Optimizations (2025-12-17):
+7. Auto-detection of TF32/BF16 for Ampere+ GPUs (compute capability >= 8.0)
+8. Optimized DataLoader with prefetch_factor and persistent_workers
+9. PyTorch 2.0+ compatible gradient checkpointing (use_reentrant=False)
+10. High precision matmul for better numerical stability
+
 Usage:
     python train_nllb_translation.py --dry_run          # Validate setup without training
     python train_nllb_translation.py --max_samples 100  # Quick test with small dataset
@@ -100,14 +106,29 @@ def get_safe_num_workers() -> int:
 
 
 def setup_environment() -> None:
-    """Configure environment for optimal training stability."""
+    """Configure environment for optimal training stability.
+    
+    CLaRA-Inspired: Auto-detects GPU compute capability and enables
+    optimal precision settings (TF32 for Ampere+, BF16 for Hopper+).
+    """
     # Disable meta device placement to prevent NotImplementedError
     os.environ['ACCELERATE_TORCH_DEVICE_PLACEMENT'] = '0'
     
-    # Enable TF32 for faster matmul on Ampere+ GPUs
+    # Auto-detect optimal precision settings based on GPU capability
     if torch.cuda.is_available():
-        torch.backends.cuda.matmul.allow_tf32 = True
-        torch.backends.cudnn.allow_tf32 = True
+        capability = torch.cuda.get_device_capability()
+        compute_cap = capability[0] * 10 + capability[1]  # e.g., 8.6 -> 86
+        
+        if compute_cap >= 80:  # Ampere+ (RTX 30xx, A100, etc.)
+            # Enable TF32 for faster matmul (3x speedup with minimal precision loss)
+            torch.backends.cuda.matmul.allow_tf32 = True
+            torch.backends.cudnn.allow_tf32 = True
+            # Set matmul precision to 'high' for better numerical stability
+            torch.set_float32_matmul_precision('high')
+            print(f"      [AUTO] Enabled TF32 precision (GPU compute capability: {capability[0]}.{capability[1]})")
+        
+        if compute_cap >= 89:  # Ada Lovelace (RTX 40xx) or Hopper (H100)
+            print(f"      [AUTO] BF16 recommended for optimal throughput")
         
     # Set memory-efficient settings
     os.environ.setdefault('PYTORCH_CUDA_ALLOC_CONF', 'max_split_size_mb:128')
@@ -390,7 +411,16 @@ def preprocess_dataset(
 # =============================================================================
 
 def create_training_args(config: NLLBTrainingConfig) -> Seq2SeqTrainingArguments:
-    """Create Seq2Seq training arguments with optimized settings."""
+    """Create Seq2Seq training arguments with CLaRA-inspired optimizations.
+    
+    Optimizations:
+    - prefetch_factor: Pre-load batches for better GPU utilization
+    - persistent_workers: Keep workers alive between epochs (non-Windows)
+    - gradient_checkpointing_kwargs: PyTorch 2.0+ compatibility
+    """
+    # Determine optimal DataLoader settings based on OS
+    use_persistent_workers = config.dataloader_num_workers > 0 and os.name != 'nt'
+    prefetch = 4 if config.dataloader_num_workers > 0 else None
     
     return Seq2SeqTrainingArguments(
         output_dir=config.output_dir,
@@ -407,10 +437,15 @@ def create_training_args(config: NLLBTrainingConfig) -> Seq2SeqTrainingArguments
         save_strategy="epoch",
         optim="paged_adamw_8bit",
         gradient_checkpointing=config.gradient_checkpointing,
+        # PyTorch 2.0+ gradient checkpointing compatibility
+        gradient_checkpointing_kwargs={"use_reentrant": False} if config.gradient_checkpointing else None,
         max_grad_norm=config.max_grad_norm,
         label_smoothing_factor=config.label_smoothing_factor,
+        # CLaRA-inspired DataLoader optimizations
         dataloader_num_workers=config.dataloader_num_workers,
         dataloader_pin_memory=config.dataloader_pin_memory,
+        dataloader_prefetch_factor=prefetch,
+        dataloader_persistent_workers=use_persistent_workers,
         report_to="none",
         remove_unused_columns=False,  # Required for PEFT compatibility
         # Seq2Seq specific

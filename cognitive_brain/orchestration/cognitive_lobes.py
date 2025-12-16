@@ -409,6 +409,18 @@ class RecommendationLobe(CognitiveLobe):
         return self._ready
 
 
+# Import CLaRa-enhanced lobes
+try:
+    from cognitive_brain.orchestration.clara_lobe import (
+        CLaRaContextLobe,
+        CLaRaEnhancedEmpathyLobe,
+    )
+    HAS_CLARA = True
+except ImportError:
+    HAS_CLARA = False
+    logger.warning("CLaRa lobes not available - install dependencies")
+
+
 # Factory function to create lobes
 def create_lobe(lobe_name: str, **kwargs) -> CognitiveLobe:
     """Factory function to create cognitive lobes."""
@@ -420,6 +432,13 @@ def create_lobe(lobe_name: str, **kwargs) -> CognitiveLobe:
         "recommendation": RecommendationLobe,
     }
     
+    # Add CLaRa lobes if available
+    if HAS_CLARA:
+        lobes.update({
+            "clara_context": CLaRaContextLobe,
+            "clara_empathy": CLaRaEnhancedEmpathyLobe,
+        })
+    
     if lobe_name not in lobes:
         raise ValueError(f"Unknown lobe: {lobe_name}. Available: {list(lobes.keys())}")
     
@@ -429,13 +448,23 @@ def create_lobe(lobe_name: str, **kwargs) -> CognitiveLobe:
 # Get all available lobes
 def get_all_lobes() -> Dict[str, CognitiveLobe]:
     """Get all cognitive lobes initialized with defaults."""
-    return {
+    lobes = {
         "inventory": InventoryLobe(),
         "empathy": EmpathyLobe(),
         "visual": VisualLobe(),
         "code": CodeLobe(),
         "recommendation": RecommendationLobe(),
     }
+    
+    # Add CLaRa lobes if available
+    if HAS_CLARA:
+        lobes.update({
+            "clara_context": CLaRaContextLobe(),
+            "clara_empathy": CLaRaEnhancedEmpathyLobe(),
+        })
+        logger.info("CLaRa-enhanced lobes loaded")
+    
+    return lobes
 
 
 if __name__ == "__main__":

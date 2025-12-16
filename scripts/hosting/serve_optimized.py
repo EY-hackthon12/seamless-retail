@@ -1,3 +1,21 @@
+"""
+Optimized LLM Hosting Server with CLaRA-Inspired Optimizations
+==============================================================
+
+Features:
+- vLLM engine with automatic fallback to native PyTorch
+- Hardware auto-scaling based on GPU capabilities
+- Dynamic batch sizing based on prompt length
+- TF32/BF16 auto-configuration for Ampere+ GPUs
+- Early EOS detection in streaming mode
+- OOM recovery with automatic cache clearing
+
+CLaRA-Inspired Optimizations (2025-12-17):
+- Dynamic batch sizing: Adjusts batch size based on total token count
+- Memory-efficient generation: Pre-computed max sequence limits
+- Early stopping: Detects EOS tokens to minimize wasted compute
+- Precision optimization: Auto-enables TF32 for Ampere+ GPUs
+"""
 
 import os
 import time
@@ -109,6 +127,14 @@ class HardwareAutoscaler:
             self.vram_gb = props.total_memory / (1024**3)
             self.gpu_name = props.name
             self.compute_cap = (props.major, props.minor)
+            
+            # CLaRA-inspired: Auto-enable TF32 for Ampere+ GPUs
+            compute_level = props.major * 10 + props.minor
+            if compute_level >= 80:  # Ampere+ (RTX 30xx, A100, etc.)
+                torch.backends.cuda.matmul.allow_tf32 = True
+                torch.backends.cudnn.allow_tf32 = True
+                torch.set_float32_matmul_precision('high')
+                print(f"--> [AUTO] Enabled TF32 precision (compute capability: {props.major}.{props.minor})")
         else:
             self.gpu_name = "CPU (No CUDA)"
 
@@ -241,14 +267,48 @@ class BatchingFallbackEngine:
                 await self.process_batch(batch_reqs)
 
     async def process_batch(self, batch_reqs):
+        """Process a batch of requests with dynamic sizing.
+        
+        CLaRA-inspired: Adjusts effective batch size based on token count
+        to prevent OOM on long prompts.
+        """
         non_stream_reqs = [r for r in batch_reqs if not r.get('stream', False)]
         stream_reqs = [r for r in batch_reqs if r.get('stream', False)]
         
         if non_stream_reqs:
-            await self._run_batch_generation(non_stream_reqs)
+            # Dynamic batch sizing based on total tokens
+            await self._run_batch_generation_dynamic(non_stream_reqs)
             
         for req in stream_reqs:
             asyncio.create_task(self._run_streaming_generation(req))
+    
+    def _estimate_batch_tokens(self, prompts: List[str], max_new: int) -> int:
+        """Estimate total tokens for a batch (CLaRA-inspired)."""
+        input_tokens = sum(len(self.tokenizer.encode(p, add_special_tokens=False)) for p in prompts)
+        return input_tokens + (max_new * len(prompts))
+    
+    async def _run_batch_generation_dynamic(self, reqs):
+        """Run batch generation with dynamic batch sizing.
+        
+        CLaRA-inspired: Splits large batches to prevent OOM.
+        """
+        prompts = [r['prompt'] for r in reqs]
+        req_configs = [r['config'] for r in reqs]
+        max_new = max([c.max_new_tokens for c in req_configs])
+        
+        # Dynamic batch sizing based on token count
+        total_tokens = self._estimate_batch_tokens(prompts, max_new)
+        max_tokens_per_batch = self.config_params.get('max_context', 4096) * self.batch_size
+        
+        if total_tokens > max_tokens_per_batch and len(prompts) > 1:
+            # Split batch in half and process recursively
+            mid = len(reqs) // 2
+            print(f"--> [Dynamic Batch] Splitting batch ({total_tokens} tokens > {max_tokens_per_batch} limit)")
+            await self._run_batch_generation_dynamic(reqs[:mid])
+            await self._run_batch_generation_dynamic(reqs[mid:])
+            return
+        
+        await self._run_batch_generation(reqs)
 
     async def _run_batch_generation(self, reqs):
         prompts = [r['prompt'] for r in reqs]
