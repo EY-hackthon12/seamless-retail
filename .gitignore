@@ -16,3 +16,6 @@ node_modules/
 trained_models/
 !trained_models/**/final_adapter/
 frontend/.next/dev/lock
+
+# Agent configuration
+.agent/

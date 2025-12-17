@@ -136,6 +136,7 @@ class EmpathyLobe(CognitiveLobe):
     Empathy Lobe - Emotionally Intelligent Customer Chat.
     
     Uses Mistral-7B-Retail for natural, empathetic conversations.
+    Falls back to Gemini API when local LLM is unavailable.
     Optimized for sales psychology and customer satisfaction.
     """
     
@@ -145,6 +146,7 @@ class EmpathyLobe(CognitiveLobe):
     def __init__(self, llm_url: str = "http://localhost:8002"):
         self.llm_url = llm_url
         self._ready = False
+        self._gemini_engine = None  # Lazy-loaded Gemini fallback
         
         # Empathy-focused system prompt
         self.system_prompt = """You are a warm, helpful retail assistant with exceptional emotional intelligence. Your goals:
@@ -177,16 +179,17 @@ Always be genuine, never pushy. Focus on solving the customer's problem."""
                         "messages": messages,
                         "max_tokens": 256,
                         "temperature": 0.7
-                    }
+                    },
+                    timeout=aiohttp.ClientTimeout(total=10)
                 ) as resp:
                     if resp.status == 200:
                         data = await resp.json()
                         response = data["choices"][0]["message"]["content"]
                     else:
-                        response = await self._fallback_response(input.query)
+                        response = await self._gemini_fallback(input.query)
         except Exception as e:
-            logger.warning(f"EmpathyLobe: LLM call failed: {e}")
-            response = await self._fallback_response(input.query)
+            logger.warning(f"EmpathyLobe: Local LLM unavailable: {e}")
+            response = await self._gemini_fallback(input.query)
         
         latency = (time.perf_counter() - start_time) * 1000
         
@@ -197,8 +200,47 @@ Always be genuine, never pushy. Focus on solving the customer's problem."""
             latency_ms=latency
         )
     
-    async def _fallback_response(self, query: str) -> str:
-        """Fallback responses when LLM is unavailable."""
+    async def _gemini_fallback(self, query: str) -> str:
+        """
+        Fallback to Gemini API when local LLM is unavailable.
+        
+        Uses smart model selection - 'empathy' agent gets gemini-2.5-flash.
+        Falls back to static responses if Gemini also fails.
+        """
+        try:
+            # Lazy import and initialize Gemini engine
+            from cognitive_brain.inference.gemini_fallback import (
+                GeminiEngine,
+                is_gemini_available,
+            )
+            
+            if not is_gemini_available():
+                logger.warning("Gemini API key not set, using static fallback")
+                return self._static_fallback(query)
+            
+            # Initialize engine if needed
+            if self._gemini_engine is None:
+                self._gemini_engine = GeminiEngine()
+                self._gemini_engine.load_model()
+            
+            # Generate using agent-aware method (uses gemini-2.5-flash for empathy)
+            prompt = f"{self.system_prompt}\n\nCustomer: {query}\n\nAssistant:"
+            result = await self._gemini_engine.generate_for_agent(
+                prompt=prompt,
+                agent_name="empathy",
+                max_new_tokens=256,
+                temperature=0.7,
+            )
+            
+            logger.info(f"EmpathyLobe: Gemini fallback used ({result['model_used']})")
+            return result["text"]
+            
+        except Exception as e:
+            logger.error(f"EmpathyLobe: Gemini fallback failed: {e}")
+            return self._static_fallback(query)
+    
+    def _static_fallback(self, query: str) -> str:
+        """Static responses when all LLMs are unavailable."""
         query_lower = query.lower()
         
         if any(w in query_lower for w in ["hello", "hi", "hey"]):

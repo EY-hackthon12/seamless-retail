@@ -374,7 +374,7 @@ class GeminiConfig:
     """Configuration for Gemini API fallback."""
     
     api_key: str = field(default_factory=lambda: os.getenv("GOOGLE_API_KEY", os.getenv("GEMINI_API_KEY", "")))
-    preferred_model: GeminiModel = GeminiModel.GEMINI_2_FLASH_EXP
+    preferred_model: GeminiModel = GeminiModel.GEMINI_25_FLASH
     enable_fallback_chain: bool = True
     max_retries: int = 3
     base_retry_delay: float = 1.0  # Exponential backoff base
@@ -900,7 +900,13 @@ class GeminiEngine:
     def unload(self) -> None:
         """Unload the engine."""
         if self._client:
-            asyncio.get_event_loop().run_until_complete(self._client.close())
+            # Close session properly in async context
+            try:
+                loop = asyncio.get_running_loop()
+                loop.create_task(self._client.close())
+            except RuntimeError:
+                # No running loop, create one
+                asyncio.run(self._client.close())
             self._client = None
         self._loaded = False
     
