@@ -43,32 +43,32 @@ class GeminiModel(Enum):
     """
     Available Gemini models with smart assignment.
     
-    Default: gemini-2.0-flash-exp for all complex agents
+    Default: gemini-2.5-flash for all complex agents (newest, best)
     Lower models only for simple/fast tasks (e.g., intent classification)
     """
     
     # PRIMARY - Use for all main agents (Empathy, Code, Recommendation)
-    GEMINI_2_FLASH_EXP = "gemini-2.0-flash-exp"
+    GEMINI_25_FLASH = "gemini-2.5-flash"          # Newest, best - DEFAULT
     
-    # SECONDARY - Only if 2.0 is unavailable or for specific use cases
-    GEMINI_15_PRO = "gemini-1.5-pro"  # 2M context for massive docs
+    # SECONDARY - High capability options
+    GEMINI_25_PRO = "gemini-2.5-pro"              # Most capable
+    GEMINI_20_FLASH = "gemini-2.0-flash"          # Fast multimodal
     
-    # LIGHTWEIGHT - Only for simple/fast tasks (intent routing, classification)
-    GEMINI_15_FLASH = "gemini-1.5-flash"
-    GEMINI_15_FLASH_8B = "gemini-1.5-flash-8b"  # Fastest, simple tasks only
+    # LIGHTWEIGHT - For simple/fast tasks (intent routing, classification)
+    GEMINI_20_FLASH_LITE = "gemini-2.0-flash-lite"  # Fastest, simple tasks
     
     @classmethod
     def get_default(cls) -> "GeminiModel":
-        """Get the default model (Gemini 2.0 Flash)."""
-        return cls.GEMINI_2_FLASH_EXP
+        """Get the default model (Gemini 2.5 Flash - newest best)."""
+        return cls.GEMINI_25_FLASH
     
     @classmethod
     def get_fallback_chain(cls) -> List["GeminiModel"]:
         """Get fallback chain starting with best model."""
         return [
-            cls.GEMINI_2_FLASH_EXP,  # Primary - newest, fastest
-            cls.GEMINI_15_PRO,        # Fallback - most capable
-            cls.GEMINI_15_FLASH,      # Fallback 2
+            cls.GEMINI_25_FLASH,   # Primary - newest, best
+            cls.GEMINI_25_PRO,     # Fallback - most capable
+            cls.GEMINI_20_FLASH,   # Fallback 2
         ]
 
 
@@ -81,26 +81,26 @@ class AgentComplexity(Enum):
 
 # Smart model assignment based on agent type/complexity
 AGENT_MODEL_ASSIGNMENT = {
-    # Complex agents - ALWAYS use Gemini 2.0 Flash
-    "empathy": GeminiModel.GEMINI_2_FLASH_EXP,
-    "clara_empathy": GeminiModel.GEMINI_2_FLASH_EXP,
-    "code": GeminiModel.GEMINI_2_FLASH_EXP,
-    "recommendation": GeminiModel.GEMINI_2_FLASH_EXP,
-    "sales": GeminiModel.GEMINI_2_FLASH_EXP,
+    # Complex agents - ALWAYS use Gemini 2.5 Flash (newest, best)
+    "empathy": GeminiModel.GEMINI_25_FLASH,
+    "clara_empathy": GeminiModel.GEMINI_25_FLASH,
+    "code": GeminiModel.GEMINI_25_FLASH,
+    "recommendation": GeminiModel.GEMINI_25_FLASH,
+    "sales": GeminiModel.GEMINI_25_FLASH,
     
-    # Medium complexity - Gemini 2.0 Flash (can fallback to 1.5 Flash)
-    "inventory": GeminiModel.GEMINI_2_FLASH_EXP,
-    "loyalty": GeminiModel.GEMINI_2_FLASH_EXP,
-    "visual": GeminiModel.GEMINI_2_FLASH_EXP,
+    # Medium complexity - Gemini 2.5 Flash (same - it's fast enough)
+    "inventory": GeminiModel.GEMINI_25_FLASH,
+    "loyalty": GeminiModel.GEMINI_25_FLASH,
+    "visual": GeminiModel.GEMINI_25_FLASH,
     
-    # Simple/fast tasks - Use lightweight model
-    "router": GeminiModel.GEMINI_15_FLASH_8B,        # Intent routing - speed critical
-    "classifier": GeminiModel.GEMINI_15_FLASH_8B,   # Classification tasks
-    "intent": GeminiModel.GEMINI_15_FLASH_8B,       # Intent detection
+    # Simple/fast tasks - Use lightweight model for speed
+    "router": GeminiModel.GEMINI_20_FLASH_LITE,      # Intent routing - speed critical
+    "classifier": GeminiModel.GEMINI_20_FLASH_LITE,  # Classification tasks
+    "intent": GeminiModel.GEMINI_20_FLASH_LITE,      # Intent detection
     
-    # RAG with massive context - Use 1.5 Pro for 2M context
-    "clara_context": GeminiModel.GEMINI_15_PRO,     # May need massive context
-    "rag": GeminiModel.GEMINI_15_PRO,               # Document retrieval
+    # RAG with massive context - Use 2.5 Pro for best capability
+    "clara_context": GeminiModel.GEMINI_25_PRO,      # May need massive context
+    "rag": GeminiModel.GEMINI_25_PRO,                # Document retrieval
 }
 
 
@@ -109,45 +109,45 @@ def get_model_for_agent(agent_name: str) -> GeminiModel:
     Get the appropriate Gemini model for a specific agent.
     
     Strategy:
-    - Complex reasoning agents → Gemini 2.0 Flash (best performance)
-    - Simple routing/classification → Gemini 1.5 Flash 8B (fastest)
-    - Massive context RAG → Gemini 1.5 Pro (2M context)
-    - Default → Gemini 2.0 Flash
+    - Complex reasoning agents → Gemini 2.5 Flash (best performance)
+    - Simple routing/classification → Gemini 2.0 Flash Lite (fastest)
+    - Massive context RAG → Gemini 2.5 Pro (best capability)
+    - Default → Gemini 2.5 Flash
     """
     agent_key = agent_name.lower().replace("lobe", "").replace("agent", "").strip()
-    return AGENT_MODEL_ASSIGNMENT.get(agent_key, GeminiModel.GEMINI_2_FLASH_EXP)
+    return AGENT_MODEL_ASSIGNMENT.get(agent_key, GeminiModel.GEMINI_25_FLASH)
 
 
 # Model context limits and characteristics
 GEMINI_MODEL_INFO = {
-    GeminiModel.GEMINI_2_FLASH_EXP: {
+    GeminiModel.GEMINI_25_FLASH: {
         "max_context": 1_000_000,
         "max_output": 8192,
-        "rpm_limit": 10,  # Requests per minute (free tier)
+        "rpm_limit": 15,
         "tier": "primary",
-        "description": "Newest, fastest - USE FOR ALL MAIN AGENTS",
+        "description": "Newest, best - USE FOR ALL MAIN AGENTS",
         "use_for": ["empathy", "code", "recommendation", "sales", "chat"],
     },
-    GeminiModel.GEMINI_15_PRO: {
+    GeminiModel.GEMINI_25_PRO: {
         "max_context": 2_000_000,  # 2M context!
         "max_output": 8192,
-        "rpm_limit": 2,
-        "tier": "context-heavy",
-        "description": "2M context - for massive document RAG only",
+        "rpm_limit": 5,
+        "tier": "pro",
+        "description": "Most capable - for complex RAG and reasoning",
         "use_for": ["rag", "clara_context", "document_analysis"],
     },
-    GeminiModel.GEMINI_15_FLASH: {
+    GeminiModel.GEMINI_20_FLASH: {
         "max_context": 1_000_000,
         "max_output": 8192,
         "rpm_limit": 15,
         "tier": "fallback",
-        "description": "Fallback if 2.0 unavailable",
-        "use_for": ["fallback"],
+        "description": "Fast multimodal - fallback option",
+        "use_for": ["fallback", "multimodal"],
     },
-    GeminiModel.GEMINI_15_FLASH_8B: {
+    GeminiModel.GEMINI_20_FLASH_LITE: {
         "max_context": 1_000_000,
         "max_output": 8192,
-        "rpm_limit": 15,
+        "rpm_limit": 30,
         "tier": "lightweight",
         "description": "Fastest - ONLY for simple routing/classification",
         "use_for": ["router", "classifier", "intent"],
