@@ -1,0 +1,186 @@
+# ==============================================================================
+# Production Docker Compose - Seamless Retail AI
+# ==============================================================================
+# CLaRA-Inspired Optimizations:
+# - GPU-accelerated LLM hosting with vLLM PagedAttention
+# - TF32/BF16 precision auto-configuration
+# - Health checks and graceful degradation
+# - Volume caching for HuggingFace models
+# - Resource limits to prevent OOM
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  # ==========================================================================
+  # LLM HOST - GPU-Accelerated Inference
+  # ==========================================================================
+  llm-host:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.gpu
+    container_name: seamless-retail-llm
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+        limits:
+          memory: 16G
+    environment:
+      # === MODEL CONFIGURATION ===
+      - BASE_MODEL=${BASE_MODEL:-bigcode/starcoder2-3b}
+      - ADAPTER_PATH=${ADAPTER_PATH:-trained_models/code_agent_proto/final_adapter}
+      - QUANTIZATION=${QUANTIZATION:-4bit}
+
+      # === SPEED OPTIMIZATIONS ===
+      - TORCH_ALLOW_TF32_CUBLAS_OVERRIDE=1
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True,max_split_size_mb:128
+      - VLLM_WORKER_MULTIPROC_METHOD=spawn
+
+      # === BATCHING CONFIGURATION ===
+      - MAX_BATCH_SIZE=${MAX_BATCH_SIZE:-8}
+      - BATCH_TIMEOUT=0.05
+    volumes:
+      # Mount HuggingFace cache to skip model re-downloads
+      - huggingface_cache:/root/.cache/huggingface
+      # Mount trained adapters
+      - ./trained_models:/app/trained_models:ro
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 30s
+      timeout: 10s
+      start_period: 120s # Allow time for model loading
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+
+  # ==========================================================================
+  # COGNITIVE BRAIN - Agent Orchestration
+  # ==========================================================================
+  cognitive-brain:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: seamless-retail-brain
+    restart: unless-stopped
+    environment:
+      # === BRAIN CONFIGURATION ===
+      - LLM_HOST_URL=http://llm-host:8000
+      - LOBE_TIMEOUT_SECONDS=${LOBE_TIMEOUT_SECONDS:-5.0}
+
+      # === DATABASE ===
+      - POSTGRES_SERVER=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-secure_password_here}
+      - POSTGRES_DB=retail_brain
+    volumes:
+      - ./cognitive_brain:/app/cognitive_brain:ro
+      - ./scripts/brain:/app/scripts/brain
+    ports:
+      - "8001:8001"
+    depends_on:
+      llm-host:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8001/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==========================================================================
+  # FRONTEND - Next.js Application
+  # ==========================================================================
+  frontend:
+    image: node:20-alpine
+    container_name: seamless-retail-frontend
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - frontend_modules:/app/node_modules
+    command: sh -c "npm ci --production=false && npm run build && npm run start"
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8001
+      - NEXT_PUBLIC_LLM_URL=http://localhost:8000
+      - NODE_ENV=production
+    depends_on:
+      - cognitive-brain
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:3000" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==========================================================================
+  # DATABASE - PostgreSQL
+  # ==========================================================================
+  db:
+    image: postgres:15-alpine
+    container_name: seamless-retail-db
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./app/db/schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-secure_password_here}
+      - POSTGRES_DB=retail_brain
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ==========================================================================
+  # REDIS - Session Cache (Optional, for scaling)
+  # ==========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: seamless-retail-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+# ==============================================================================
+# PERSISTENT VOLUMES
+# ==============================================================================
+volumes:
+  huggingface_cache:
+    driver: local
+  postgres_data:
+    driver: local
+  frontend_modules:
+    driver: local
+  redis_data:
+    driver: local
+
+# ==============================================================================
+# NETWORKS (Optional - for isolation)
+# ==============================================================================
+networks:
+  default:
+    name: seamless-retail-network
+    driver: bridge

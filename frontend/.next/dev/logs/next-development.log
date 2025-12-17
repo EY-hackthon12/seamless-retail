@@ -1,0 +1,1585 @@
+[00:00:01.873] Server  LOG      ✓ Ready in 1356ms
+[00:01:56.636] Server  LOG      ○ Compiling /la ...
+[00:02:03.985] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:04.799] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:04.799] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/la" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <body
+                            className="geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__var..."
+-                           __processed_20b8a28d-48c1-46f1-85b6-01bf665bdc4b__="true"
+                          >
+                  ...
+
+[00:02:42.141] Server  LOG      ✓ Compiled in 43ms
+[00:02:42.996] Server  ERROR    ⨯ Error: The default export is not a React Component in "/la/page"
+[00:02:43.314] Server  ERROR    ⨯ Error: The default export is not a React Component in "/la/page"
+[00:02:43.706] Server  ERROR    ⨯ Error: The default export is not a React Component in "/la/page"
+[00:02:44.018] Server  ERROR    ⨯ Error: The default export is not a React Component in "/la/page"
+[00:02:44.375] Server  ERROR    ⨯ Error: The default export is not a React Component in "/la/page"
+[00:02:44.659] Server  ERROR    ⨯ Error: The default export is not a React Component in "/la/page"
+[00:02:44.928] Server  ERROR    ⨯ Error: The default export is not a React Component in "/la/page"
+[00:02:45.226] Server  ERROR    ⨯ Error: The default export is not a React Component in "/la/page"
+[00:02:46.525] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/la/page"
+[00:02:47.512] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/la/page"
+[00:03:41.246] Server  LOG      ○ Compiling / ...
+[00:03:45.809] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:45.809] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <body
++                           className="geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__var..."
+-                           className="geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__var..."
+                          >
+                  ...
+
+[00:03:46.695] Browser LOG     Animation completed!
+[00:03:48.982] Browser LOG     Animation completed!
+[00:04:21.141] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:26.560] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:35.125] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:43.963] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:03.248] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:03.974] Browser LOG     Animation completed!
+[00:08:06.307] Browser LOG     Animation completed!
+[00:08:30.829] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:31.003] Browser WARN    Image with src "/assets/group.jpeg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:08:43.995] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:44.705] Browser LOG     Animation completed!
+[00:08:46.188] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:46.188] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <ScrollAndFocusHandler segmentPath={[...]}>
+      <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:false, ...}}>
+        <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+          <LoadingBoundary name="contact/" loading={null}>
+            <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <InnerLayoutRouter url="/contact" tree={[...]} params={{}} cacheNode={{lazyData:null, ...}} ...>
+                    <SegmentViewNode type="page" pagePath="contact/pa...">
+                      <SegmentTrieNode>
+                      <ClientPageRoot Component={function ContactPage} serverProvidedParams={{...}}>
+                        <ContactPage params={Promise} searchParams={Promise}>
+                          <main className="relative m...">
+                            <div className="absolute i...">
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              ...
+                            ...
+                    ...
+                  ...
+        ...
+
+[00:08:56.589] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:56.589] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <ScrollAndFocusHandler segmentPath={[...]}>
+      <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:false, ...}}>
+        <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+          <LoadingBoundary name="contact/" loading={null}>
+            <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <InnerLayoutRouter url="/contact" tree={[...]} params={{}} cacheNode={{lazyData:null, ...}} ...>
+                    <SegmentViewNode type="page" pagePath="contact/pa...">
+                      <SegmentTrieNode>
+                      <ClientPageRoot Component={function ContactPage} serverProvidedParams={{...}}>
+                        <ContactPage params={Promise} searchParams={Promise}>
+                          <main className="relative m...">
+                            <div className="absolute i...">
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              <div>
+                              <div
++                               className="w-full h-full bg-green-600"
+-                               className="w-full h-full bg-transparent"
+                              >
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div>
+                              <div
++                               className="w-full h-full bg-transparent"
+-                               className="w-full h-full bg-green-600"
+                              >
+                              ...
+                            ...
+                    ...
+                  ...
+        ...
+
