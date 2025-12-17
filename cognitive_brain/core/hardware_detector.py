@@ -69,6 +69,7 @@ class InferenceBackend(Enum):
     TRITON = "triton"           # NVIDIA Triton
     ONNX = "onnx"               # ONNX Runtime
     TENSORRT = "tensorrt"       # TensorRT (NVIDIA optimized)
+    GEMINI_API = "gemini_api"   # Google Gemini API fallback
 
 
 @dataclass

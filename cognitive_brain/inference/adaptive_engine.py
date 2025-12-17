@@ -535,6 +535,8 @@ class AdaptiveInferenceEngine:
         self._detector = HardwareDetector()
         self._config: Optional[InferenceConfig] = None
         self._engine: Optional[InferenceEngine] = None
+        self._gemini_engine = None  # Gemini API fallback
+        self._using_gemini: bool = False
         self._model_path: Optional[str] = None
         
         if auto_detect:
@@ -567,6 +569,7 @@ class AdaptiveInferenceEngine:
         model_path: str,
         backend: Optional[InferenceBackend] = None,
         force_cpu: bool = False,
+        use_gemini_fallback: bool = True,
         **kwargs
     ) -> None:
         """
@@ -576,8 +579,14 @@ class AdaptiveInferenceEngine:
             model_path: Model identifier (HF ID, local path, or GGUF path)
             backend: Force specific backend (None = auto-detect)
             force_cpu: Force CPU-only inference
+            use_gemini_fallback: If True, fall back to Gemini API if local load fails
             **kwargs: Backend-specific arguments
         """
+        # Check for Gemini API backend request
+        if backend == InferenceBackend.GEMINI_API:
+            self._load_gemini_fallback(**kwargs)
+            return
+        
         # Determine backend
         if backend is None:
             if force_cpu:
@@ -587,7 +596,34 @@ class AdaptiveInferenceEngine:
             else:
                 backend = self.hardware_config.backend
         
-        # Create appropriate engine
+        # Try to load local model
+        try:
+            self._load_local_model(model_path, backend, force_cpu, **kwargs)
+        except Exception as e:
+            logger.error(f"Failed to load local model: {e}")
+            
+            if use_gemini_fallback:
+                logger.info("Falling back to Gemini API...")
+                try:
+                    self._load_gemini_fallback(**kwargs)
+                    return
+                except Exception as fallback_error:
+                    logger.error(f"Gemini fallback also failed: {fallback_error}")
+                    raise RuntimeError(
+                        f"Both local model and Gemini fallback failed. "
+                        f"Local: {e}, Gemini: {fallback_error}"
+                    )
+            else:
+                raise
+    
+    def _load_local_model(
+        self,
+        model_path: str,
+        backend: InferenceBackend,
+        force_cpu: bool,
+        **kwargs
+    ) -> None:
+        """Load a local model with the specified backend."""
         logger.info(f"Initializing {backend.value} backend...")
         
         if backend == InferenceBackend.VLLM:
@@ -622,6 +658,32 @@ class AdaptiveInferenceEngine:
             raise ValueError(f"Unsupported backend: {backend}")
         
         self._model_path = model_path
+    
+    def _load_gemini_fallback(self, **kwargs) -> None:
+        """Load Gemini API as fallback backend."""
+        try:
+            from cognitive_brain.inference.gemini_fallback import (
+                GeminiEngine,
+                GeminiConfig,
+                is_gemini_available,
+            )
+        except ImportError:
+            raise RuntimeError("Gemini fallback module not available")
+        
+        if not is_gemini_available():
+            raise RuntimeError(
+                "Gemini API key not set. Set GOOGLE_API_KEY environment variable."
+            )
+        
+        logger.info("Initializing Gemini API backend...")
+        
+        config = GeminiConfig()
+        self._gemini_engine = GeminiEngine(config)
+        self._gemini_engine.load_model(**kwargs)
+        self._model_path = "gemini-api-fallback"
+        self._using_gemini = True
+        
+        logger.info(f"Gemini fallback active. Model: {config.preferred_model.value}")
     
     def generate(
         self,
